@@ -8,12 +8,21 @@ app.use(express.json());
 
 app.use('/', require('./routes'));
 
-mongodb.initDb((err) => {
-    if (err) {
-        console.log(err);
-    } else {
-        app.listen(port, () => {
-            console.log(`DB connected. Server running on port ${port}`);
+const startServer = async () => {
+    try {
+        mongodb.initDb((err) => {
+            if (err) {
+                console.error('MongoDB connection error:', err);
+            }
+
+            app.listen(port, () => {
+                console.log(`Server running on port ${port}`);
+            });
         });
+
+    } catch (error) {
+        console.error('Fatal server error:', error);
     }
-});
+};
+
+startServer();
