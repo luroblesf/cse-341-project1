@@ -29,19 +29,26 @@ const createUser = async (req, res) => {
         birthday: req.body.birthday
     };
 
-    console.log(user);
+    try {
+        const response = await mongodb
+            .getDb()
+            .collection('users')
+            .insertOne(user);
 
-    const response = await mongodb
-        .getDb()
-        .collection('users')
-        .insertOne(user);
-
-    console.log(response);
-
-    if (response.acknowledged) {
-        res.status(201).send();
-    } else {
-        res.status(500).json(response.error || 'Some error occurred while creating the user.');
+        if (response.acknowledged) {
+            res.status(201).json({
+                message: "User created successfully",
+                id: response.insertedId
+            });
+        } else {
+            res.status(500).json(
+                response.error || 'Some error occurred while creating the user.'
+            );
+        }
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
     }
 };
 
