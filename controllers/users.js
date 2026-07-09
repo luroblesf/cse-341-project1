@@ -28,9 +28,18 @@ const createUser = async (req, res) => {
         favoriteColor: req.body.favoriteColor,
         birthday: req.body.birthday
     };
-    const response = await mongodb.getDb().collection('users').replaceOne({ _id: userId }, user);
+
+    console.log(user);
+
+    const response = await mongodb
+        .getDb()
+        .collection('users')
+        .insertOne(user);
+
+    console.log(response);
+
     if (response.acknowledged) {
-        res.status(204).send();
+        res.status(201).send();
     } else {
         res.status(500).json(response.error || 'Some error occurred while creating the user.');
     }
