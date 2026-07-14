@@ -1,3 +1,5 @@
+const isAuthenticated = require("../middleware/authenticate");
+
 const router = require("express").Router();
 
 const groupsController = require("../controllers/groups");
@@ -9,11 +11,11 @@ router.get("/", groupsController.getAll);
 
 router.get("/:id", groupsController.getSingle);
 
-router.post("/", groupValidationRules(), validate, groupsController.createGroup);
+router.post("/", isAuthenticated, groupValidationRules(), validate, groupsController.createGroup);
 
-router.put( "/:id", groupValidationRules(), validate, groupsController.updateGroup);
+router.put("/:id", isAuthenticated, groupValidationRules(), validate, groupsController.updateGroup);
 
-router.delete("/:id", groupsController.deleteGroup);
+router.delete("/:id", isAuthenticated, groupsController.deleteGroup);
 
 
 module.exports = router;

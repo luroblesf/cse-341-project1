@@ -53,7 +53,7 @@ const createGroup = async (req, res) => {
         name: req.body.name,
         description: req.body.description,
         meetingPlace: req.body.meetingPlace,
-        createdBy: req.body.createdBy,
+        createdBy: req.user._id,
         createdAt: new Date(),
         isActive: req.body.isActive,
     };
@@ -89,7 +89,7 @@ const updateGroup = async (req, res) => {
             name: req.body.name,
             description: req.body.description,
             meetingPlace: req.body.meetingPlace,
-            createdBy: req.body.createdBy,
+            createdBy: req.user._id,
             createdAt: new Date(),
             isActive: req.body.isActive,
         };

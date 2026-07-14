@@ -221,9 +221,6 @@
                 "meetingPlace": {
                   "example": "any"
                 },
-                "createdBy": {
-                  "example": "any"
-                },
                 "isActive": {
                   "example": "any"
                 }
@@ -237,6 +234,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "500": {
             "description": "Internal Server Error"
@@ -291,9 +291,6 @@
                 "meetingPlace": {
                   "example": "any"
                 },
-                "createdBy": {
-                  "example": "any"
-                },
                 "isActive": {
                   "example": "any"
                 }
@@ -307,6 +304,9 @@
           },
           "400": {
             "description": "Bad Request"
+          },
+          "401": {
+            "description": "Unauthorized"
           },
           "404": {
             "description": "Not Found"
@@ -330,11 +330,44 @@
           "204": {
             "description": "No Content"
           },
+          "401": {
+            "description": "Unauthorized"
+          },
           "404": {
             "description": "Not Found"
           },
           "500": {
             "description": "Internal Server Error"
+          }
+        }
+      }
+    },
+    "/auth/google": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
+          }
+        }
+      }
+    },
+    "/auth/google/callback": {
+      "get": {
+        "description": "",
+        "responses": {
+          "200": {
+            "description": "OK"
+          }
+        }
+      }
+    },
+    "/auth/logout": {
+      "get": {
+        "description": "",
+        "responses": {
+          "default": {
+            "description": ""
           }
         }
       }
