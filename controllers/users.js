@@ -12,12 +12,30 @@ const getAll = async (req, res) => {
 
 
 const getSingle = async (req, res) => {
-    const userId = new ObjectId(req.params.id);
-    const result = await mongodb.getDb().collection('users').find({ _id: userId });
-    result.toArray().then((users) => {
-        res.setHeader('Content-Type', 'application/json');
+    try {
+
+        const userId = new ObjectId(req.params.id);
+
+        const result = await mongodb
+            .getDb()
+            .collection('users')
+            .find({ _id: userId });
+
+        const users = await result.toArray();
+
+        if (!users.length) {
+            return res.status(404).json({
+                message: "User not found."
+            });
+        }
+
         res.status(200).json(users[0]);
-    });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
+    }
 };
 
 const createUser = async (req, res) => {
@@ -26,7 +44,9 @@ const createUser = async (req, res) => {
         lastName: req.body.lastName,
         email: req.body.email,
         favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
+        birthday: req.body.birthday,
+        phone: req.body.phone,
+        groupId: req.body.groupId
     };
 
     try {
@@ -53,29 +73,61 @@ const createUser = async (req, res) => {
 };
 
 const updateUser = async (req, res) => {
-    const userId = new ObjectId(req.params.id);
-    const user = {
-        firstName: req.body.firstName,
-        lastName: req.body.lastName,
-        email: req.body.email,
-        favoriteColor: req.body.favoriteColor,
-        birthday: req.body.birthday
-    };
-    const response = await mongodb.getDb().collection('users').replaceOne({ _id: userId }, user);
-    if (response.modifiedCount > 0) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'Some error occurred while updating the user.');
+    try {
+        const userId = new ObjectId(req.params.id);
+
+        const user = {
+            firstName: req.body.firstName,
+            lastName: req.body.lastName,
+            email: req.body.email,
+            favoriteColor: req.body.favoriteColor,
+            birthday: req.body.birthday,
+            phone: req.body.phone,
+            groupId: req.body.groupId
+        };
+
+        const response = await mongodb
+            .getDb()
+            .collection('users')
+            .replaceOne({ _id: userId }, user);
+
+        if (response.modifiedCount > 0) {
+            return res.status(204).send();
+        }
+
+        res.status(404).json({
+            message: "User not found."
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
     }
 };
 
 const deleteUser = async (req, res) => {
-    const userId = new ObjectId(req.params.id);
-    const response = await mongodb.getDb().collection('users').deleteOne({ _id: userId });
-    if (response.deletedCount > 0) {
-        res.status(204).send();
-    } else {
-        res.status(500).json(response.error || 'Some error occurred while deleting the user.');
+    try {
+
+        const userId = new ObjectId(req.params.id);
+
+        const response = await mongodb
+            .getDb()
+            .collection('users')
+            .deleteOne({ _id: userId });
+
+        if (response.deletedCount > 0) {
+            return res.status(204).send();
+        }
+
+        res.status(404).json({
+            message: "User not found."
+        });
+
+    } catch (error) {
+        res.status(500).json({
+            message: error.message
+        });
     }
 };
 
