@@ -58,9 +58,9 @@ const groupValidationRules = () => {
             .notEmpty()
             .withMessage("Meeting place is required"),
 
-        body("createdBy")
-            .notEmpty()
-            .withMessage("Created by is required")
+        body("isActive")
+            .isBoolean()
+            .withMessage("isActive must be true or false")
     ];
 };
 
