@@ -13,6 +13,11 @@ const getAll = async (req, res) => {
 
 const getSingle = async (req, res) => {
     try {
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid user ID.'
+            });
+        }
 
         const userId = new ObjectId(req.params.id);
 
@@ -25,7 +30,7 @@ const getSingle = async (req, res) => {
 
         if (!users.length) {
             return res.status(404).json({
-                message: "User not found."
+                message: 'User not found.'
             });
         }
 
@@ -74,6 +79,13 @@ const createUser = async (req, res) => {
 
 const updateUser = async (req, res) => {
     try {
+        // Validar ID
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid user ID.'
+            });
+        }
+
         const userId = new ObjectId(req.params.id);
 
         const user = {
@@ -95,12 +107,12 @@ const updateUser = async (req, res) => {
             return res.status(204).send();
         }
 
-        res.status(404).json({
-            message: "User not found."
+        return res.status(404).json({
+            message: 'User not found.'
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
@@ -108,6 +120,12 @@ const updateUser = async (req, res) => {
 
 const deleteUser = async (req, res) => {
     try {
+        // Validar ID
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid user ID.'
+            });
+        }
 
         const userId = new ObjectId(req.params.id);
 
@@ -120,12 +138,12 @@ const deleteUser = async (req, res) => {
             return res.status(204).send();
         }
 
-        res.status(404).json({
-            message: "User not found."
+        return res.status(404).json({
+            message: 'User not found.'
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
