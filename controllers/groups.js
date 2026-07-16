@@ -1,7 +1,6 @@
 const mongodb = require('../data/database');
 const ObjectId = require('mongodb').ObjectId;
 
-
 const getAll = async (req, res) => {
     try {
         const result = await mongodb
@@ -11,18 +10,22 @@ const getAll = async (req, res) => {
 
         const groups = await result.toArray();
 
-        res.status(200).json(groups);
+        return res.status(200).json(groups);
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
 };
 
-
 const getSingle = async (req, res) => {
     try {
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid group ID.'
+            });
+        }
 
         const groupId = new ObjectId(req.params.id);
 
@@ -35,14 +38,14 @@ const getSingle = async (req, res) => {
 
         if (!groups.length) {
             return res.status(404).json({
-                message: "Group not found."
+                message: 'Group not found.'
             });
         }
 
-        res.status(200).json(groups[0]);
+        return res.status(200).json(groups[0]);
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
@@ -55,7 +58,7 @@ const createGroup = async (req, res) => {
         meetingPlace: req.body.meetingPlace,
         createdBy: req.user._id,
         createdAt: new Date(),
-        isActive: req.body.isActive,
+        isActive: req.body.isActive
     };
 
     try {
@@ -65,17 +68,18 @@ const createGroup = async (req, res) => {
             .insertOne(group);
 
         if (response.acknowledged) {
-            res.status(201).json({
-                message: "Group created successfully",
+            return res.status(201).json({
+                message: 'Group created successfully',
                 id: response.insertedId
             });
-        } else {
-            res.status(500).json(
-                response.error || 'Some error occurred while creating the group.'
-            );
         }
+
+        return res.status(500).json({
+            message: response.error || 'Some error occurred while creating the group.'
+        });
+
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
@@ -83,6 +87,12 @@ const createGroup = async (req, res) => {
 
 const updateGroup = async (req, res) => {
     try {
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid group ID.'
+            });
+        }
+
         const groupId = new ObjectId(req.params.id);
 
         const group = {
@@ -91,7 +101,7 @@ const updateGroup = async (req, res) => {
             meetingPlace: req.body.meetingPlace,
             createdBy: req.user._id,
             createdAt: new Date(),
-            isActive: req.body.isActive,
+            isActive: req.body.isActive
         };
 
         const response = await mongodb
@@ -103,12 +113,12 @@ const updateGroup = async (req, res) => {
             return res.status(204).send();
         }
 
-        res.status(404).json({
-            message: "Group not found."
+        return res.status(404).json({
+            message: 'Group not found.'
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
@@ -116,6 +126,11 @@ const updateGroup = async (req, res) => {
 
 const deleteGroup = async (req, res) => {
     try {
+        if (!ObjectId.isValid(req.params.id)) {
+            return res.status(400).json({
+                message: 'Invalid group ID.'
+            });
+        }
 
         const groupId = new ObjectId(req.params.id);
 
@@ -128,12 +143,12 @@ const deleteGroup = async (req, res) => {
             return res.status(204).send();
         }
 
-        res.status(404).json({
-            message: "Group not found."
+        return res.status(404).json({
+            message: 'Group not found.'
         });
 
     } catch (error) {
-        res.status(500).json({
+        return res.status(500).json({
             message: error.message
         });
     }
