@@ -1,8 +1,8 @@
 const router = require("express").Router();
 
 const groupsController = require("../controllers/groups");
-
 const { groupValidationRules, validate } = require("../middleware/validator");
+const auth = require('../middleware/authenticate');
 
 // #swagger.tags = ['Groups']
 
@@ -10,10 +10,10 @@ router.get("/", groupsController.getAll);
 
 router.get("/:id", groupsController.getSingle);
 
-router.post("/", groupValidationRules(), validate, groupsController.createGroup);
+router.post("/", auth.isAuthenticated, groupValidationRules(), validate, groupsController.createGroup);
 
-router.put("/:id", groupValidationRules(), validate, groupsController.updateGroup);
+router.put("/:id", auth.isAuthenticated, groupValidationRules(), validate, groupsController.updateGroup);
 
-router.delete("/:id", groupsController.deleteGroup);
+router.delete("/:id", auth.isAuthenticated, groupsController.deleteGroup);
 
 module.exports = router;

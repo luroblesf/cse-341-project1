@@ -1,12 +1,17 @@
 const express = require('express');
 const router = express.Router();
+
 router.use('/', require('./swagger'));
+
 router.get('/', (req, res) => {
-    res.send('| Welcome to CSE 341 Project 1 |');
+    res.send(
+        req.session.user
+            ? `Logged in as ${req.session.user.displayName}`
+            : 'Logged Out'
+    );
 });
 
 router.use('/users', require('./users'));
 router.use('/groups', require('./groups'));
-
 
 module.exports = router;
