@@ -58,7 +58,7 @@ app.get('/login',
 
 
 // Callback de GitHub
-app.get('/github/callback',
+app.get('/auth/github/callback',
     passport.authenticate('github', {
         failureRedirect: '/'
     }),
