@@ -4,11 +4,8 @@ const isAuthenticated = (req, res, next) => {
     console.log("Usuario:", req.session.user);
 
     if (!req.session.user) {
-        return res.status(401).json({
-            message: 'You do not have access.'
-        });
+        return res.status(401).json('You do not have access.');
     }
-
     next();
 };
 

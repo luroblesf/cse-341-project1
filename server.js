@@ -67,15 +67,17 @@ app.get('/github/callback',
 );
 
 
-// Logout
-app.get('/logout', (req, res) => {
-    req.logout(() => {
-        req.session.destroy(() => {
-            res.redirect('/');
+app.get('/logout', (req, res, next) => {
+    req.logout((err) => {
+        if (err) return next(err);
+
+        req.session.destroy((err) => {
+            if (err) return next(err);
+
+            res.redirect('https://github.com/logout');
         });
     });
 });
-
 
 app.use('/', require('./routes'));
 
