@@ -6,7 +6,7 @@ router.use('/', require('./swagger'));
 router.get('/', (req, res) => {
     res.send(
         req.session.user
-            ? `Logged in as ${req.session.user.displayName}`
+            ? `Logged in as ${req.session.user.username}`
             : 'Logged Out'
     );
 });

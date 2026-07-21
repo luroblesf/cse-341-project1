@@ -51,7 +51,6 @@ passport.deserializeUser((user, done) => {
 });
 
 
-
 app.get('/login',
     passport.authenticate('github')
 );
