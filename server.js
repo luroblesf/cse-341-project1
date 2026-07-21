@@ -28,7 +28,7 @@ app.use(cors({
     methods: ['GET', 'POST', 'PUT', 'DELETE']
 }));
 
-// Passport GitHub
+
 passport.use(
     new GitHubStrategy(
         {
@@ -51,14 +51,13 @@ passport.deserializeUser((user, done) => {
 });
 
 
-// Login con GitHub
+
 app.get('/login',
     passport.authenticate('github')
 );
 
 
-// Callback de GitHub
-app.get('/auth/github/callback',
+app.get('/github/callback',
     passport.authenticate('github', {
         failureRedirect: '/'
     }),
@@ -79,11 +78,9 @@ app.get('/logout', (req, res) => {
 });
 
 
-// Rutas del proyecto
 app.use('/', require('./routes'));
 
 
-// Database
 mongodb.initDb((err) => {
     if (err) {
         console.error(err);
